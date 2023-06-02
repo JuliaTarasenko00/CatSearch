@@ -1,0 +1,125 @@
+p,
+h1,
+h2,
+h3 {
+  margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding-left: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+body {
+  background: #111111;
+}
+.link {
+  text-decoration: none;
+}
+
+.list {
+  list-style: none;
+}
+.is-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+.container {
+  width: 1281px;
+  padding-left: 32px;
+  padding-right: 32px;
+  margin: 0 auto;
+  /* outline: 2px solid tomato; */
+}
+.search_film_input {
+  background: transparent;
+  padding: 12px 24px 12px 24px;
+  margin-right: 16px;
+  width: 334px;
+  height: 48px;
+  border: 1px solid #ffffff;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+}
+.search_film {
+  text-align: center;
+}
+.search_film_btn {
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  border: transparent;
+  border-radius: 50%;
+  background: linear-gradient(141.22deg, #ffc226 9.4%, #f84119 91.91%);
+}
+
+.search_film_list {
+  padding-top: 48px;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 16px;
+  row-gap: 32px;
+}
+.search_film_title {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 19px;
+  line-height: 1.15;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+.search_film_genre {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.15;
+  color: #b7b7b7;
+}
+.tui-page-btn.tui-is-disabled.tui-first,
+.tui-page-btn.tui-last,
+.tui-page-btn.tui-first,
+.tui-page-btn .tui-last {
+  display: none;
+}
+.tui-page-btn.tui-is-disabled.tui-prev,
+.tui-page-btn.tui-prev,
+.tui-page-btn.tui-next {
+  border: transparent;
+}
+.tui-ico-prev {
+  color: #b7b7b7;
+}
+.tui-pagination .tui-page-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-left: 10px;
+}
+.tui-pagination .tui-is-selected, .tui-pagination strong {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: transparent;
+  background: linear-gradient(141.22deg, #ffc226 9.4%, #f84119 91.91%);
+}
+.tui-page-btn.tui-is-selected.tui-first-child.tui-last-child {
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 400;
+  text-align: center;
+  border: 1px solid #b7b7b7;
+}
