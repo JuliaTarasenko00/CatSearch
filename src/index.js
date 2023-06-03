@@ -39,8 +39,7 @@ function markupFilms(data, genreMap) {
         first_air_date,
       }) => {
         const url = `https://image.tmdb.org/t/p/original${poster_path}`;
-        const year =
-          typeof release_date !== 'undefined'
+        const year = typeof release_date !== 'undefined'
             ? release_date.split('-')[0]
             : first_air_date.split('-')[0];
         let genreNames = genre_ids.map(genreId => { 
@@ -48,18 +47,20 @@ function markupFilms(data, genreMap) {
             return 'Film'
           }
           return genreMap[genreId]});
-        if (genreNames.length > 3) {
-           genreNames = genreNames.slice(0, 3);
-           return;
+
+        if (genreNames.length > 2) {
+           genreNames = genreNames.slice(0, 2);
         }
         // console.log(genreNames)
-        return `<li>
-        <img src="${url}" alt="${ original_name || original_title}"
-         width="395" height="574" class="search_film_img"/>
-        <div class="search_film_wrap">
-          <p class="search_film_title">${original_name || original_title}</p>
-          <p class="search_film_genre">${genreNames} | ${year}</p>
-        </div>
+        return `<li class="search_film_img_wrap">
+            <img src="${url}" alt="${ original_name || original_title}"
+             width="395" height="574" class="search_film_img"/>
+             <div class="wrap">
+          <div class="search_film_wrap">
+            <p class="search_film_title">${original_name || original_title}</p>
+            <p class="search_film_genre">${genreNames} | ${year}</p>
+          </div>
+          </div>
       </li>`;
       }
     )

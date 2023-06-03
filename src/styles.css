@@ -38,88 +38,130 @@ body {
   overflow: hidden;
 }
 .container {
-  width: 1281px;
-  padding-left: 32px;
-  padding-right: 32px;
+  max-width: 320px;
+  padding-left: 20px;
+  padding-right: 20px;
   margin: 0 auto;
   /* outline: 2px solid tomato; */
 }
+
 .search_film_input {
   background: transparent;
   padding: 12px 24px 12px 24px;
   margin-right: 16px;
-  width: 334px;
-  height: 48px;
+  width: 219px;
+  height: 40px;
   border: 1px solid #ffffff;
   border-radius: 8px;
   font-weight: 500;
   font-size: 14px;
   line-height: 16px;
+  color: #b7b7b7;
+  outline: none;
 }
 .search_film {
-  text-align: center;
+  padding-top: 40px;
 }
 .search_film_btn {
   cursor: pointer;
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   border: transparent;
   border-radius: 50%;
   background: linear-gradient(141.22deg, #ffc226 9.4%, #f84119 91.91%);
 }
 
 .search_film_list {
-  padding-top: 48px;
+  padding-top: 16px;
   display: flex;
   flex-wrap: wrap;
-  column-gap: 16px;
-  row-gap: 32px;
+  row-gap: 16px;
 }
 .search_film_title {
-  font-style: normal;
+  text-transform: uppercase;
   font-weight: 500;
-  font-size: 19px;
-  line-height: 1.15;
+  font-size: 12px;
+  line-height: 1.67;
   color: #ffffff;
-  margin-bottom: 8px;
 }
 .search_film_genre {
   font-weight: 500;
-  font-size: 20px;
-  line-height: 1.15;
+  font-size: 12px;
+  line-height: 1.67;
   color: #b7b7b7;
 }
-.tui-page-btn.tui-is-disabled.tui-first,
-.tui-page-btn.tui-last,
-.tui-page-btn.tui-first,
-.tui-page-btn .tui-last {
-  display: none;
+.search_film_img_wrap {
+  position: relative;
 }
-.tui-page-btn.tui-is-disabled.tui-prev,
-.tui-page-btn.tui-prev,
-.tui-page-btn.tui-next {
-  border: transparent;
+.search_film_img{
+  border-radius: 5px;
 }
-.tui-ico-prev {
-  color: #b7b7b7;
+.search_film_wrap {
+  position: absolute;
+  bottom: 20px;
+  left: 12px;
 }
-.tui-pagination .tui-page-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-left: 10px;
+.wrap {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  border-radius: 5px;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 63.48%,
+    rgba(0, 0, 0, 0.9) 92.16%
+  );
 }
-.tui-pagination .tui-is-selected, .tui-pagination strong {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: transparent;
-  background: linear-gradient(141.22deg, #ffc226 9.4%, #f84119 91.91%);
+@media screen and (min-width: 768px) {
+  .container {
+    max-width: 768px;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+  .search_film {
+    text-align: center;
+  }
+  .search_film_wrap,
+  .search_film_img {
+    width: 224px;
+  }
+  .search_film_title,
+  .search_film_genre {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .search_film_list {
+    column-gap: 16px;
+    row-gap: 28px;
+  }
+  .search_film_list {
+    padding-top: 36px;
+  }
+  .search_film {
+    padding-top: 60px;
+  }
 }
-.tui-page-btn.tui-is-selected.tui-first-child.tui-last-child {
-  font-size: 18px;
-  line-height: 1;
-  font-weight: 400;
-  text-align: center;
-  border: 1px solid #b7b7b7;
+@media screen and (min-width: 1280px) {
+  .container {
+    max-width: 1290px;
+  }
+  .search_film_wrap,
+  .search_film_img {
+    width: 394px;
+  }
+  .search_film_title {
+    font-size: 18px;
+  }
+  .search_film_genre {
+    font-size: 20px;
+    line-height: 1.15;
+  }
+  .search_film_input {
+    width: 334px;
+  }
+  .search_film_wrap{
+    left: 20px;
+  }
 }
