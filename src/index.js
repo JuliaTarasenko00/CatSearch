@@ -18,56 +18,66 @@ API.getCategoriesGenres().then(genresData => {
   });
 });
 
-function createGenreMap(genresData) {
-  const accGenresData = genresData.reduce((acc, genre) => {
-    acc[genre.id] = genre.name;
-    return acc;
-  }, {});
-  // console.log(acc);
-  return accGenresData;
+
+function createFilmMarkup({
+  poster_path,
+  original_title,
+  original_name,
+  release_date,
+  first_air_date,
+}, genreNames, vote_average) {
+  const url = `https://image.tmdb.org/t/p/original${poster_path}`;
+  const year = typeof release_date !== 'undefined'
+    ? release_date.split('-')[0]
+    : first_air_date.split('-')[0];
+  return `<li class="search_film_img_wrap">
+    <img src="${url}" alt="${original_name || original_title}"
+      width="395" height="574" class="search_film_img"/>
+    <div class="wrap">
+      <div class="search_film_wrap">
+        <p class="search_film_title">${original_name || original_title}</p>
+        <p class="search_film_genre">${genreNames} | ${year}</p>
+        <p class="stars is-hidden">${vote_average}</p>
+      </div>
+    </div>
+  </li>`;
 }
 
 function markupFilms(data, genreMap) {
-  const markup = data
-    .map(
-      ({
-        poster_path,
-        original_title,
-        original_name,
-        genre_ids,
-        release_date,
-        first_air_date,
-      }) => {
-        const url = `https://image.tmdb.org/t/p/original${poster_path}`;
-        const year = typeof release_date !== 'undefined'
-            ? release_date.split('-')[0]
-            : first_air_date.split('-')[0];
-        let genreNames = genre_ids.map(genreId => { 
-          if(!genreMap[genreId]){
-            return 'Film'
-          }
-          return genreMap[genreId]});
+  const markup = data.map((film) => {
+    // console.log(film)
+    const genreNames = createGenreNames(film.genre_ids, genreMap);
+    const voteAverage = film.vote_average; 
 
-        if (genreNames.length > 2) {
-           genreNames = genreNames.slice(0, 2);
-        }
-        // console.log(genreNames)
-        return `<li class="search_film_img_wrap">
-            <img src="${url}" alt="${ original_name || original_title}"
-             width="395" height="574" class="search_film_img"/>
-             <div class="wrap">
-          <div class="search_film_wrap">
-            <p class="search_film_title">${original_name || original_title}</p>
-            <p class="search_film_genre">${genreNames} | ${year}</p>
-          </div>
-          </div>
-      </li>`;
-      }
-    )
-    .join('');
+    return createFilmMarkup(film, genreNames, voteAverage);
+  }).join('');
 
   refs.ulEl.innerHTML = markup;
 }
+
+function createGenreMap(genresData) {
+  const accGenresData = genresData.reduce((acc, genre) => {
+    acc[genre.id] = genre.name;
+  // console.log(acc);
+    return acc;
+  }, {});
+  return accGenresData;
+}
+
+function createGenreNames(genre_ids, genreMap) {
+  let genreNames = genre_ids.map(genreId => {
+    if (!genreMap[genreId]) {
+      return 'Film';
+    }
+    return genreMap[genreId];
+  });
+
+  if (genreNames.length > 2) {
+    genreNames = genreNames.slice(0, 2);
+  }
+  return genreNames;
+}
+
 
 // function initPagination() {
 //   const pagination2 = new Pagination(refs.divPagination, {
