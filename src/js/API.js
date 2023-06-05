@@ -35,14 +35,14 @@ export class filmAPI {
       console.log(err);
     }
   }
-  async getCategoriesQuery(query) {
+  async getCategoriesQuery(query, page) {
     const endpoint = 'search/movie';
     const { data } = await axios.get(
-      `${BASE_URL}/${endpoint}?api_key=${API_KEY}&query=${query}&page=${this.page}&language=en-US`
+      `${BASE_URL}/${endpoint}?api_key=${API_KEY}&query=${query}&page=${page}&language=en-US`
     );
     // console.log(data);
     try {
-      return data.results;
+      return data;
     } catch (err) {
       console.log(err);
     }

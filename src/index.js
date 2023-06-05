@@ -1,13 +1,15 @@
 import Pagination from 'tui-pagination';
 import { filmAPI } from './js/API';
+import { createPagination } from './js/pagination';
 
 const refs = {
   ulEl: document.querySelector('.search_film_list'),
   inputEl: document.querySelector('.search_film_input'),
-  divPagination: document.getElementById('pagination2'),
+  divPagination: document.getElementById('pagination'),
   form: document.getElementById('form'),
   btnReset: document.querySelector('.btn_reset'),
-  toTop: document.querySelector('.to_top')
+  toTop: document.querySelector('.to_top'),
+  falseResultMessage: document.querySelector('.cards__message'),
 };
 
 let categories = {};
@@ -55,7 +57,9 @@ function markupFilm(data) {
 
 </div>
 </li>`;
-      }).join('');
+      }
+    )
+    .join('');
   refs.ulEl.innerHTML = markup;
 }
 
@@ -86,14 +90,59 @@ function yearsFilm(release_date, first_air_date) {
   return year;
 }
 
+let currentPage = 1;
+let searchQuery = '';
+
 refs.form.addEventListener('submit', onSubmit);
-function onSubmit(ev) {
+
+async function onSubmit(ev) {
   ev.preventDefault();
-  const value = ev.currentTarget.elements.film_name.value.trim();
-  if (value.length >= 1) {
+  searchQuery = ev.currentTarget.elements.film_name.value.trim();
+  refs.divPagination.classList.add('display-hidden');
+  refs.falseResultMessage.classList.add('display-hidden');
+
+  if (searchQuery.length >= 1) {
     refs.btnReset.classList.remove('is-hidden');
   }
-  API.getCategoriesQuery(value).then(res => markupFilm(res));
+
+  const response = await API.getCategoriesQuery(searchQuery, currentPage);
+  refs.ulEl.innerHTML = '';
+  
+  markupFilm(response.results);
+  addPaginatoin(response);
+  addFalseResultText(response);
+}
+
+function addPaginatoin(response) {
+  if (response.total_results > 20) {
+    refs.divPagination.classList.remove('display-hidden');
+
+    const pagination = createPagination(
+      response.total_results,
+      response.total_pages
+    );
+
+    pagination.on('afterMove', event => {
+      currentPage = event.page;
+      API.getCategoriesQuery(searchQuery, currentPage)
+        .then(data => {
+          markupFilm(data.results);
+          window.scrollTo({
+            top: 450,
+            behavior: 'smooth',
+          });
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    });
+  }
+}
+
+function addFalseResultText(response) {
+  if (response.total_results === 0) {
+    refs.falseResultMessage.classList.remove('display-hidden');
+  }
 }
 
 refs.btnReset.addEventListener('click', () => {
