@@ -13,6 +13,8 @@ const refs = {
 };
 
 let categories = {};
+let currentPage = 1;
+let searchQuery = '';
 
 const API = new filmAPI();
 
@@ -21,10 +23,11 @@ API.getCategoriesGenres()
     res.forEach(({ id, name }) => {
       categories[id] = name;
     });
-    return API.getCategories();
+    return API.getCategories(currentPage);
   })
   .then(categoriesData => {
-    markupFilm(categoriesData);
+    markupFilm(categoriesData.results);
+    paginationTrendWeek(categoriesData);
   })
   .catch(Error);
 
@@ -63,16 +66,37 @@ function markupFilm(data) {
   refs.ulEl.innerHTML = markup;
 }
 
+// function categoriesFilms(genreIds) {
+//   let categoriesFilm = genreIds
+//     .filter(genre => genre !== undefined)
+//     .map(genre => {
+//       if (!categories[genre]) {
+//         return 'Film';
+//       }
+//       return categories[genre];
+//     });
+//   // console.log(categoriesFilm.length);
+//   if (categoriesFilm.length > 2) {
+//     categoriesFilm = categoriesFilm.slice(0, 2);
+//   }
+//   if (categoriesFilm.length === 0) {
+//     return 'Film';
+//   }
+//   return categoriesFilm.join(', ');
+// }
+
 function categoriesFilms(genreIds) {
-  let categoriesFilm = genreIds
-    .filter(genre => genre !== undefined)
-    .map(genre => {
-      if (!categories[genre]) {
-        return 'Film';
-      }
-      return categories[genre];
-    });
-  // console.log(categoriesFilm.length);
+  let categoriesFilm = [];
+  if (typeof genreIds !== 'undefined') {
+    categoriesFilm = genreIds
+      .filter(genre => typeof genre !== 'undefined')
+      .map(genre => {
+        if (!categories[genre]) {
+          return 'Film';
+        }
+        return categories[genre];
+      });
+  }
   if (categoriesFilm.length > 2) {
     categoriesFilm = categoriesFilm.slice(0, 2);
   }
@@ -86,17 +110,17 @@ function yearsFilm(release_date, first_air_date) {
   const year =
     typeof release_date !== 'undefined'
       ? release_date.split('-')[0]
-      : first_air_date.split('-')[0];
+      : typeof first_air_date !== 'undefined'
+      ? first_air_date.split('-')[0]
+      : '';
   return year;
 }
-
-let currentPage = 1;
-let searchQuery = '';
 
 refs.form.addEventListener('submit', onSubmit);
 
 async function onSubmit(ev) {
   ev.preventDefault();
+  currentPage = 1;
   searchQuery = ev.currentTarget.elements.film_name.value.trim();
   refs.divPagination.classList.add('display-hidden');
   refs.falseResultMessage.classList.add('display-hidden');
@@ -107,13 +131,39 @@ async function onSubmit(ev) {
 
   const response = await API.getCategoriesQuery(searchQuery, currentPage);
   refs.ulEl.innerHTML = '';
-  
+
   markupFilm(response.results);
-  addPaginatoin(response);
+  paginationSearchFilms(response);
   addFalseResultText(response);
 }
 
-function addPaginatoin(response) {
+function paginationTrendWeek(response) {
+  if (response.total_results > 20) {
+    refs.divPagination.classList.remove('display-hidden');
+
+    const pagination = createPagination(
+      response.total_results,
+      response.total_pages
+    );
+
+    pagination.on('afterMove', event => {
+      currentPage = event.page;
+      API.getCategories(currentPage)
+        .then(data => {
+          markupFilm(data.results);
+          window.scrollTo({
+            top: 450,
+            behavior: 'smooth',
+          });
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    });
+  }
+}
+
+function paginationSearchFilms(response) {
   if (response.total_results > 20) {
     refs.divPagination.classList.remove('display-hidden');
 

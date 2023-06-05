@@ -9,16 +9,16 @@ export class filmAPI {
     this.total_pages = 0;
     this.total_results = 0;
   }
-  async getCategories() {
+  async getCategories(page) {
     const endpoint = 'trending/all/week';
     const { data } = await axios.get(
-      `${BASE_URL}/${endpoint}?api_key=${API_KEY}&page=${this.page}&language=en-US`
+      `${BASE_URL}/${endpoint}?api_key=${API_KEY}&page=${page}&language=en-US`
     );
     try {
       this.total_pages = data.total_pages;
       this.total_results = data.total_results;
 
-      return data.results;
+      return data;
     } catch (err) {
       console.log(err);
     }
