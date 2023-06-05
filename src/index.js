@@ -6,6 +6,8 @@ const refs = {
   inputEl: document.querySelector('.search_film_input'),
   divPagination: document.getElementById('pagination2'),
   form: document.getElementById('form'),
+  btnReset: document.querySelector('.btn_reset'),
+  toTop: document.querySelector('.to_top')
 };
 
 let categories = {};
@@ -13,15 +15,16 @@ let categories = {};
 const API = new filmAPI();
 
 API.getCategoriesGenres()
-  .then((res) => {
+  .then(res => {
     res.forEach(({ id, name }) => {
       categories[id] = name;
     });
     return API.getCategories();
   })
-  .then((categoriesData) => {
+  .then(categoriesData => {
     markupFilm(categoriesData);
-  }).catch(Error);
+  })
+  .catch(Error);
 
 function markupFilm(data) {
   const markup = data
@@ -49,22 +52,27 @@ function markupFilm(data) {
     <p class="search_film_genre">${genre} | ${year}</p>
     <p class="stars is-hidden">${vote_average}</p>
   </div>
+
 </div>
 </li>`;
-      }
-    )
-    .join('');
+      }).join('');
   refs.ulEl.innerHTML = markup;
 }
 
 function categoriesFilms(genreIds) {
-  let categoriesFilm = genreIds.filter(genre => genre !== undefined)
-  .map(genre => categories[genre]);
+  let categoriesFilm = genreIds
+    .filter(genre => genre !== undefined)
+    .map(genre => {
+      if (!categories[genre]) {
+        return 'Film';
+      }
+      return categories[genre];
+    });
   // console.log(categoriesFilm.length);
   if (categoriesFilm.length > 2) {
     categoriesFilm = categoriesFilm.slice(0, 2);
   }
-  if (categoriesFilm.length === 0){
+  if (categoriesFilm.length === 0) {
     return 'Film';
   }
   return categoriesFilm.join(', ');
@@ -82,22 +90,17 @@ refs.form.addEventListener('submit', onSubmit);
 function onSubmit(ev) {
   ev.preventDefault();
   const value = ev.currentTarget.elements.film_name.value.trim();
-  // console.log(value)
+  if (value.length >= 1) {
+    refs.btnReset.classList.remove('is-hidden');
+  }
   API.getCategoriesQuery(value).then(res => markupFilm(res));
 }
+
+refs.btnReset.addEventListener('click', () => {
+  refs.btnReset.classList.add('is-hidden');
+  refs.form.reset();
+});
 
 function Error(err) {
   console.log(err);
 }
-
-// function initPagination() {
-//   const pagination2 = new Pagination(refs.divPagination, {
-//     totalItems: API.total_results,
-//     // itemsPerPage: API.total_pages,
-//     visiblePages: 5,
-//     centerAlign: true,
-//     totalPages: API.total_pages,
-//   });
-//   pagination2.getCurrentPage()
-// }
-// refs.divPagination.addEventListener('click', onClickDivPagination);

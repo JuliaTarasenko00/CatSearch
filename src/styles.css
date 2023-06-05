@@ -55,7 +55,7 @@ body {
   border-radius: 8px;
   font-weight: 500;
   font-size: 14px;
-  line-height: 16px;
+  line-height: 1.14;
   color: #b7b7b7;
   outline: none;
 }
@@ -93,7 +93,7 @@ body {
 .search_film_img_wrap {
   position: relative;
 }
-.search_film_img{
+.search_film_img {
   border-radius: 5px;
 }
 .search_film_wrap {
@@ -113,6 +113,37 @@ body {
     rgba(0, 0, 0, 0) 63.48%,
     rgba(0, 0, 0, 0.9) 92.16%
   );
+}
+#form {
+  position: relative;
+}
+.btn_reset {
+  background: transparent;
+  border: transparent;
+  color: #b7b7b7;
+  position: absolute;
+  cursor: pointer;
+  right: 25%;
+  top: 10px;
+}
+.to_top {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  fill: #ffffff;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(141.22deg, #ffc226 9.4%, #f84119 91.91%);
+
+  background-size: contain;
+
+  cursor: pointer;
 }
 @media screen and (min-width: 768px) {
   .container {
@@ -142,6 +173,9 @@ body {
   .search_film {
     padding-top: 60px;
   }
+  .btn_reset {
+    right: 40%;
+  }
 }
 @media screen and (min-width: 1280px) {
   .container {
@@ -160,8 +194,11 @@ body {
   }
   .search_film_input {
     width: 334px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.18;
   }
-  .search_film_wrap{
+  .search_film_wrap {
     left: 20px;
   }
 }
