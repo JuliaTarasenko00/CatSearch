@@ -1,6 +1,7 @@
-import Pagination from 'tui-pagination';
 import { filmAPI } from './js/API';
 import { createPagination } from './js/pagination';
+// import { KEY_FAVORITE } from './js/local';
+import { onClickFilm } from './js/favorite_local';
 
 const refs = {
   ulEl: document.querySelector('.search_film_list'),
@@ -10,6 +11,7 @@ const refs = {
   btnReset: document.querySelector('.btn_reset'),
   toTop: document.querySelector('.to_top'),
   falseResultMessage: document.querySelector('.cards__message'),
+  collection: document.querySelector('.collection'),
 };
 
 let categories = {};
@@ -42,13 +44,14 @@ function markupFilm(data) {
         release_date,
         vote_average,
         first_air_date,
+        id,
       }) => {
         let url = poster_path
           ? `https://image.tmdb.org/t/p/original${poster_path}`
           : 'https://www.tgv.com.my/assets/images/404/movie-poster.jpg';
         const year = yearsFilm(release_date, first_air_date);
         let genre = categoriesFilms(genre_ids);
-        return `<li class="search_film_img_wrap">
+        return `<li class="search_film_img_wrap" data-id='${id}'>
 <img src="${url}" alt="${original_name || original_title}"
   width="395" height="574" class="search_film_img"/>
 <div class="wrap">
@@ -57,7 +60,7 @@ function markupFilm(data) {
     <p class="search_film_genre">${genre} | ${year}</p>
     <p class="stars is-hidden">${vote_average}</p>
   </div>
-
+  <button type="button" class="js_add_collection" data-id="${id}">Add to collection</button>
 </div>
 </li>`;
       }
@@ -66,24 +69,7 @@ function markupFilm(data) {
   refs.ulEl.innerHTML = markup;
 }
 
-// function categoriesFilms(genreIds) {
-//   let categoriesFilm = genreIds
-//     .filter(genre => genre !== undefined)
-//     .map(genre => {
-//       if (!categories[genre]) {
-//         return 'Film';
-//       }
-//       return categories[genre];
-//     });
-//   // console.log(categoriesFilm.length);
-//   if (categoriesFilm.length > 2) {
-//     categoriesFilm = categoriesFilm.slice(0, 2);
-//   }
-//   if (categoriesFilm.length === 0) {
-//     return 'Film';
-//   }
-//   return categoriesFilm.join(', ');
-// }
+refs.ulEl.addEventListener('click', onClickFilm);
 
 function categoriesFilms(genreIds) {
   let categoriesFilm = [];
@@ -202,4 +188,7 @@ refs.btnReset.addEventListener('click', () => {
 
 function Error(err) {
   console.log(err);
+}
+export {
+  markupFilm
 }

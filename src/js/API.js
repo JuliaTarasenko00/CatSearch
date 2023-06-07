@@ -47,4 +47,16 @@ export class filmAPI {
       console.log(err);
     }
   }
+
+  async getCategoriesId(id) {
+    const endpoint = `movie/${id}`;
+    const { data } = await axios.get(
+      `${BASE_URL}/${endpoint}?api_key=${API_KEY}&language=en-US`
+    );
+    try {
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  }
 }
