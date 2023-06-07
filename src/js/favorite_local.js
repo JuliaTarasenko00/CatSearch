@@ -5,7 +5,7 @@ const API = new filmAPI();
 
 const KEY_FAVORITE = 'favorite';
 
-const favoriteArr = JSON.parse(localStorage.getItem(KEY_FAVORITE)) ?? [];
+export const favoriteArr = JSON.parse(localStorage.getItem(KEY_FAVORITE)) ?? [];
 const favorite = localStorage.getItem(KEY_FAVORITE) ?? [];
 
 const jsList = document.querySelector('.js_list');

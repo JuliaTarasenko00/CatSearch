@@ -1,7 +1,7 @@
 import { filmAPI } from './js/API';
 import { createPagination } from './js/pagination';
 // import { KEY_FAVORITE } from './js/local';
-import { onClickFilm } from './js/favorite_local';
+import { onClickFilm, favoriteArr } from './js/favorite_local';
 
 const refs = {
   ulEl: document.querySelector('.search_film_list'),
@@ -51,21 +51,28 @@ function markupFilm(data) {
           : 'https://www.tgv.com.my/assets/images/404/movie-poster.jpg';
         const year = yearsFilm(release_date, first_air_date);
         let genre = categoriesFilms(genre_ids);
+
+        // Check if the film is in the favoriteArr
+        const inStorage = favoriteArr.some(film => film.id === id);
+        const buttonText = inStorage ? 'Delete' : 'Add';
+
         return `<li class="search_film_img_wrap" data-id='${id}'>
-<img src="${url}" alt="${original_name || original_title}"
-  width="395" height="574" class="search_film_img"/>
-<div class="wrap">
-  <div class="search_film_wrap">
-    <p class="search_film_title">${original_name || original_title}</p>
-    <p class="search_film_genre">${genre} | ${year}</p>
-    <p class="stars is-hidden">${vote_average}</p>
-  </div>
-  <button type="button" class="js_add_collection" data-id="${id}">Add to collection</button>
-</div>
-</li>`;
+      <img src="${url}" alt="${
+          original_name || original_title
+        }" width="395" height="574" class="search_film_img"/>
+      <div class="wrap">
+        <div class="search_film_wrap">
+          <p class="search_film_title">${original_name || original_title}</p>
+          <p class="search_film_genre">${genre} | ${year}</p>
+          <p class="stars is-hidden">${vote_average}</p>
+        </div>
+        <button type="button" class="js_add_collection" data-id="${id}">${buttonText}</button>
+      </div>
+    </li>`;
       }
     )
     .join('');
+
   refs.ulEl.innerHTML = markup;
 }
 
@@ -189,6 +196,4 @@ refs.btnReset.addEventListener('click', () => {
 function Error(err) {
   console.log(err);
 }
-export {
-  markupFilm
-}
+export { markupFilm };
